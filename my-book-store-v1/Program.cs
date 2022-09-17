@@ -31,5 +31,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+await AppDbInitializer.SeedAsync(app);
 
 app.Run();
+
+
