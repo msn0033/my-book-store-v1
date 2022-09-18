@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using my_book_store_v1.Date;
+using my_book_store_v1.Date.Models;
+using my_book_store_v1.Date.Repository;
+using my_book_store_v1.Date.ServicesManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +18,7 @@ var ConnectionString =builder.Configuration.GetConnectionString("DefaultConnecti
 // DataBase call
 builder.Services.AddDbContext<AppDbContext>(op => op.UseSqlServer(ConnectionString));
 
-
+builder.Services.AddTransient<IRepository<Book>,BookService>();
 var app = builder.Build();
 
 
