@@ -7,70 +7,52 @@ namespace my_book_store_v1.Date.ServicesManager
 {
     public class BookService : IRepository<Book>
     {
+        #region ID
         private readonly AppDbContext _dbContext;
-  
+
         public BookService(AppDbContext dbContext)
         {
             this._dbContext = dbContext;
         }
+        #endregion
 
-        public async Task<IEnumerable<Book>> GetAll()
-        {
-            return await _dbContext.Books.ToListAsync();
-        }
-        public async Task<Book?> GetById(int? id)
-        {
-            
-                var e= await _dbContext.Books.FindAsync(id);
-            return e;
-        }
-        public async Task Add(Book book)
-        {
-            _dbContext.Add(book);
-            await Save();
-        }
+        public async Task<IEnumerable<Book>> GetAllAsync() =>  await _dbContext.Books.ToListAsync();
 
-        public async Task<Book> Delete(int id)
+        public async Task<Book> GetByIdAsync(int id)=> await _dbContext.Books.FirstOrDefaultAsync(e => e.Id == id);
+      
+        public async Task AddAsync(Book book)=> await _dbContext.AddAsync(book);
+
+        public async Task<Book> DeleteAsync(int id)
         {
-            var d =await GetById(id);
-            if(d!= null)  
+            var d = await GetByIdAsync(id);
+            if (d == null)
+                return null;
             _dbContext.Books.Remove(d);
-            await Save();
-            return d;
-        }
-
-        public async Task<bool> IsExsit(int id)
-        {
-            var bol =await _dbContext.Books.AnyAsync(e => e.Id == id);
-            return bol;
-            //if (await GetById(id) != null) 
-            //    return true;
-            //return false;
-        }
-
-        public async Task Save()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<Book> Update(Book? book)
-        {
          
-            _dbContext.Entry(book).State=EntityState.Modified;
+            return d;
+        }  
+        public Book Update(Book? book)
+        {
+
+            _dbContext.Entry(book).State = EntityState.Modified;
+
             try
             {
-                await Save();
+                _dbContext.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if ( !IsExsit(book.Id).Result)
+                if (!IsExsitAsync(book.Id).GetAwaiter().GetResult())
                     return null;
                 else
 
-                throw;
+                    throw;
             }
-           
             return book;
         }
+
+        public async Task<bool> IsExsitAsync(int id) => await _dbContext.Books.AnyAsync(e => e.Id == id);
+
+        public async Task SaveAsync() => await _dbContext.SaveChangesAsync();
     }
 }
