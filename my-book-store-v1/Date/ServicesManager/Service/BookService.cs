@@ -59,6 +59,8 @@ namespace my_book_store_v1.Date.ServicesManager.Service
 
             if (item.Id == id)
             {
+
+
                 item.Title = book.Title;
                 item.Description = book.Description;
                 item.Genre = book.Genre;
