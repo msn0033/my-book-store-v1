@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using my_book_store_v1.Date;
+using my_book_store_v1.Date.Dto;
 using my_book_store_v1.Date.Models;
-using my_book_store_v1.Date.Repository;
-using my_book_store_v1.Date.ServicesManager;
+using my_book_store_v1.Date.ServicesManager.Interface;
+using my_book_store_v1.Date.ServicesManager.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,11 @@ var ConnectionString =builder.Configuration.GetConnectionString("DefaultConnecti
 // DataBase call
 builder.Services.AddDbContext<AppDbContext>(op => op.UseSqlServer(ConnectionString));
 
-builder.Services.AddTransient<IRepository<Book>,BookService>();
+builder.Services.AddTransient<IBook,BookService>();
+
+builder.Services.AddTransient<IAuthor, AuthorService>();
+
+
 var app = builder.Build();
 
 
@@ -34,7 +39,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-await AppDbInitializer.SeedAsync(app);
+//await AppDbInitializer.SeedAsync(app);
 
 app.Run();
 

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using my_book_store_v1.Date.Dto;
 using my_book_store_v1.Date.Models;
-using my_book_store_v1.Date.Repository;
+using my_book_store_v1.Date.ServicesManager.Interface;
 
 namespace my_book_store_v1.Controllers
 {
@@ -10,25 +10,29 @@ namespace my_book_store_v1.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
+        private readonly IBook _book;
         #region ID
-        private readonly  IRepository<Book> _BookService;
-        public BooksController(IRepository<Book> repository)
+
+        public BooksController(IBook book)
         {
-            _BookService = repository;
+            this._book = book;
         }
         #endregion
 
         //Get: api/Books
         [HttpGet]
-        public async Task<ActionResult< IEnumerable<Book>>> GetBooks() {
-            return Ok( await _BookService.GetAllAsync());
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        {
+            var items = await _book.GetBooksAsync();
+            if (items == null) return null;
+            return Ok(items);
         }
 
         //GET : api/Books/5
         [HttpGet("{id}")]
         public async Task <ActionResult<Book>>GetBook(int id)
         {
-            var book= await _BookService.GetByIdAsync(id);
+            var book= await _book.GetBookByIdAsync(id);
             if (book == null)
                 return NotFound();
             return Ok(book);
@@ -39,45 +43,34 @@ namespace my_book_store_v1.Controllers
         [HttpPost]
         public async Task<ActionResult> AddBook(BookDto b)
         {
-            Book book = new Book
-            {
-                CoverUrl = b.CoverUrl,
-                Description = b.Description,
-                Title = b.Title,
-                Genre = b.Genre,
-                IsRead = b.IsRead,
-                DateRead = b.IsRead ? b.DateRead.Value: null,
-                Rate = b.IsRead ? b.Rate.Value : null,
-                DateAdded = DateTime.Now
-            };
-          
-            await _BookService.AddAsync(book);
-            await _BookService.SaveAsync();
-            return Created("Ok", book);
+
+            var item=await _book.AddBookAsync(b);
+            if (item == null)
+                return BadRequest("خطاء لم تتم الاضافة");
+            return Ok("تم الاضافة بنجاح");
         }
 
         //DELETE : api/Books/3
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteBook(int id)
         {
-            var e= await _BookService.DeleteAsync(id);
-            if (e == null) return NotFound();
-            await _BookService.SaveAsync();
-            return NoContent();    
+            var item = await _book.DeleteBookAsync(id);
+            if (item == null) return NotFound();
+            await _book.SaveAsync();
+            return Ok(item);
         }
 
         //put :api/Books/8
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateBook(int id,Book book)
+        public async Task<ActionResult> UpdateBook(int id,BookDto book)
         {
-            if(id != book.Id)
-                return BadRequest();
 
-           var e= _BookService.Update(book);
-            if(e==null)
+
+            var item =await _book.UpdateBookAsync(book, id);
+            if(item==null)
             return NotFound();
-          
-            return NoContent();
+            await _book.SaveAsync();
+            return Ok(item);
         }
 
     }
