@@ -10,5 +10,18 @@ namespace my_book_store_v1.Date
 
         }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Book_Author> Book_Authors { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            #region m:m book & Author
+            modelBuilder.Entity<Book_Author>().HasKey(b => new { b.BookId, b.AuthorId });
+            modelBuilder.Entity<Book_Author>().HasOne(b => b.Book).WithMany(b => b.Book_Authors).HasForeignKey(b => b.BookId);
+            modelBuilder.Entity<Book_Author>().HasOne(b => b.Author).WithMany(b => b.Book_Authors).HasForeignKey(b => b.AuthorId);
+            #endregion
+
+        }
+
     }
 }
