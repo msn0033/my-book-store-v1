@@ -20,7 +20,6 @@ namespace my_book_store_v1.Controllers
         {
             var item =_author.GetAuthorWithBooksDtoByIdAsync(id);
             if(item == null)return NotFound();
-
             return Ok(item);
         }
     }
