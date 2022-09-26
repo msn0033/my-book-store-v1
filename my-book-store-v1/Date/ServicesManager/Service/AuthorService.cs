@@ -26,7 +26,7 @@ namespace my_book_store_v1.Date.ServicesManager.Service
                 Name = authorDto.FullName
             };
             await _DbContext.Authors.AddAsync(author);
-            await SaveAsync();
+         
             return author;
         }
         public async Task<Author> UpdateAuthorAsync(AuthorDto authorDto, int id)
@@ -52,25 +52,24 @@ namespace my_book_store_v1.Date.ServicesManager.Service
         }
         public async Task SaveAsync() => await _DbContext.SaveChangesAsync();
 
-        public async Task<bool> IsExitsAsync(int id)
+        public async Task<bool> IsExistsAsync(int id)
         {
-            var item = await _DbContext.Authors.FirstOrDefaultAsync(b => b.Id == id);
-            if (item == null)
-                return false;
-            return true;
+            //var item = await _DbContext.Authors.FirstOrDefaultAsync(b => b.Id == id);
+            //if (item == null)
+            //    return false;
+            //return true;
+            return await _DbContext.Authors.AnyAsync(a=>a.Id==id)?true:false;
         }
-
-        public  AuthorWithBooksDto GetAuthorWithBooksDtoByIdAsync(int id)
+        public async  Task<AuthorWithBooksDto> GetAuthorWithBooksDtoByIdAsync(int id)
         {
-            var item =  _DbContext.Authors.Where(x => x.Id == id).Select(x => new AuthorWithBooksDto
+            var item = await _DbContext.Authors.Where(x => x.Id == id).Select(x => new AuthorWithBooksDto
             {
                 AuthorName = x.Name,
                 Books = x.Book_Authors.Select(x => x.Books.Title).ToList(),
-            }).FirstOrDefault();
+            }).FirstOrDefaultAsync();
 
             return item;
         }
-
         public async Task<Author> GetAuthorByIdAsync(int id)=> await _DbContext.Authors.FirstOrDefaultAsync(x => x.Id == id);
     }
 }

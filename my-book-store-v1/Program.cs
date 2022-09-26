@@ -4,6 +4,7 @@ using my_book_store_v1.Date.Dto;
 using my_book_store_v1.Date.Models;
 using my_book_store_v1.Date.ServicesManager.Interface;
 using my_book_store_v1.Date.ServicesManager.Service;
+using my_book_store_v1.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(op => op.UseSqlServer(ConnectionStri
 builder.Services.AddTransient<IBook,BookService>();
 
 builder.Services.AddTransient<IAuthor, AuthorService>();
+builder.Services.AddTransient<IPublisher,PublisherService>();   
 
 
 var app = builder.Build();
@@ -39,6 +41,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//app.ConfigureExceptionHandler();
+app.ConfigureCustomeExceptionMiddleWare();
+
 //await AppDbInitializer.SeedAsync(app);
 
 app.Run();

@@ -11,7 +11,7 @@ namespace my_book_store_v1.Date.ServicesManager.Interface
         Task<Book> AddBookAsync(BookDto book);
         Task<Book> DeleteBookAsync(int id);
         Task<Book> UpdateBookAsync(BookDto book,int id);
-        //Task<Book> IsExitsAsync(int id);
+        //Task<bool> IsExistsAsync(int id);
         Task SaveAsync();
 
     }

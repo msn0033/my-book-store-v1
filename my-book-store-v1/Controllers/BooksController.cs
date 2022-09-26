@@ -10,9 +10,8 @@ namespace my_book_store_v1.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IBook _book;
         #region ID
-
+        private readonly IBook _book;
         public BooksController(IBook book)
         {
             this._book = book;
@@ -20,16 +19,16 @@ namespace my_book_store_v1.Controllers
         #endregion
 
         //Get: api/Books
-        [HttpGet]
+        [HttpGet("get-all-books")]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
             var items = await _book.GetBooksAsync();
-            if (items == null) return null;
+            if (items == null) return NotFound() ;
             return Ok(items);
         }
 
         //GET : api/Books/5
-        [HttpGet("{id}")]
+        [HttpGet("get-book-by-Id/{id}")]
         public async Task <ActionResult<Book>>GetBook(int id)
         {
             var book= await _book.GetBookByIdAsync(id);
@@ -40,8 +39,8 @@ namespace my_book_store_v1.Controllers
         }
 
         //Post: api/Books
-        [HttpPost]
-        public async Task<ActionResult> AddBook(BookDto b)
+        [HttpPost("add-book")]
+        public async Task<ActionResult> AddBook([FromBody]BookDto b)
         {
 
             var item=await _book.AddBookAsync(b);
@@ -51,7 +50,7 @@ namespace my_book_store_v1.Controllers
         }
 
         //DELETE : api/Books/3
-        [HttpDelete("{id}")]
+        [HttpDelete("delete-book-by-Id/{id}")]
         public async Task<ActionResult> DeleteBook(int id)
         {
             var item = await _book.DeleteBookAsync(id);
@@ -61,7 +60,7 @@ namespace my_book_store_v1.Controllers
         }
 
         //put :api/Books/8
-        [HttpPut("{id}")]
+        [HttpPut("Update-book/{id}")]
         public async Task<ActionResult> UpdateBook(int id,BookDto book)
         {
 
