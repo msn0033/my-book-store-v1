@@ -10,7 +10,7 @@ namespace my_book_store_v1.Controllers
     [ApiController]
     public class PublisherController : ControllerBase
     {
-        #region Fi
+        #region Di
         private readonly IPublisher _publisher;
 
         public PublisherController(IPublisher publisher)
@@ -20,19 +20,28 @@ namespace my_book_store_v1.Controllers
         #endregion
 
         [HttpGet("get-all-Publisher")]
-        public async Task<IActionResult>GetPublishers()
+        public async Task<IActionResult> GetPublishers(string OrderBy, string search, int? PageNumber, int? PageSize)
         {
-            var item=await _publisher.GetPublishersAsync();
-            if (item is null)
-                return NoContent();
-            return Ok(item);
+            try
+            {
+                var item = await _publisher.GetPublishersAsync(OrderBy, search,PageNumber,PageSize);
+                if (item is null)
+                    return NoContent();
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+
+                 return BadRequest($"can,t find any  publisher + {ex.Message}");
+               
+            }
         }
         [HttpPost("add-publisher")]
-        public async Task<IActionResult> PostAddPublisher([FromBody]PublisherDto publisherDto)
+        public async Task<IActionResult> PostAddPublisher([FromBody] PublisherDto publisherDto)
         {
-                var publisher = await _publisher.AddPublisherAsync(publisherDto);
-                if (publisher == null) return BadRequest();
-                return Created(nameof(PostAddPublisher), publisher);         
+            var publisher = await _publisher.AddPublisherAsync(publisherDto);
+            if (publisher == null) return BadRequest();
+            return Created(nameof(PostAddPublisher), publisher);
         }
 
     }

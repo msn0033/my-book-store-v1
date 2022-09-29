@@ -36,7 +36,7 @@ namespace my_book_store_v1.Exceptions
             var response = new ErrorDto
             {
                 StatusCode = (int)HttpStatusCode.InternalServerError,
-                Message = ex.Message + ex.InnerException + ex.StackTrace,
+                Message = ex.Message ,
                 Path = contentRequest.Path
             };
             return content.Response.WriteAsync(response.ToString());

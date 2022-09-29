@@ -7,7 +7,7 @@ namespace my_book_store_v1.Date.ServicesManager.Interface
     {
 
         Task<Publisher> AddPublisherAsync(PublisherDto publisherDto);
-        Task<IEnumerable<Publisher>> GetPublishersAsync();
+        Task<IEnumerable<Publisher>> GetPublishersAsync(string OrderBy,string searchValue, int? PageNumber, int? PageSize);
         Task<Publisher> GetPublisherByIdAsync(int id);
         Task<Publisher> GetPublisherByNameAsync(string name);
         Task<Publisher> UpdatePublisherAsync(int id,PublisherDto publisher);
