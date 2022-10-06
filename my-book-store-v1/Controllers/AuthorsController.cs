@@ -25,7 +25,7 @@ namespace my_book_store_v1.Controllers
             return Ok(item);
         }
 
-        [HttpGet("get-Author-with-books{id}")]
+        [HttpGet("get-Author-with-books/{id}")]
         public async  Task<IActionResult> GetAuthorWithBooksDto(int id)
         {
             var item =await _author.GetAuthorWithBooksDtoByIdAsync(id);

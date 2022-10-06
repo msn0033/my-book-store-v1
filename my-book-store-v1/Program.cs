@@ -5,6 +5,7 @@ using my_book_store_v1.Date.Models;
 using my_book_store_v1.Date.ServicesManager.Interface;
 using my_book_store_v1.Date.ServicesManager.Service;
 using my_book_store_v1.Exceptions;
+using my_book_store_v1.Helper.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,18 +14,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 
+#region DataBase
 //ConnectionString
 var ConnectionString =builder.Configuration.GetConnectionString("DefaultConnectionStrings");
 // DataBase call
 builder.Services.AddDbContext<AppDbContext>(op => op.UseSqlServer(ConnectionString));
+#endregion
 
 builder.Services.AddTransient<IBook,BookService>();
-
 builder.Services.AddTransient<IAuthor, AuthorService>();
-builder.Services.AddTransient<IPublisher,PublisherService>();   
+builder.Services.AddTransient<IPublisher,PublisherService>();
+#region Versioning
+//7-47 Versioning
+//builder.Services.AddApiVersioning();
 
+//7-48 Versioning
+// Helper-Extension
+builder.Services.ConfigureVersioning();
+#endregion
 
 var app = builder.Build();
 
@@ -32,8 +41,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

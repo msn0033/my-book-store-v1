@@ -44,7 +44,7 @@ namespace my_book_store_v1.Date.ServicesManager.Service
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Publisher>> GetPublishersAsync(string OrderBy,string searchValue,int? PageNumber,int? PageSize)
+        public async Task<PagedList<Publisher>> GetPublishersAsync(string OrderBy,string searchValue,int? PageNumber,int? PageSize)
         {
             var publisherList = await _DbContext.Publishers.OrderBy(x => x.Id).ToListAsync();
            // throw new Exception("murad how are you");
@@ -71,10 +71,9 @@ namespace my_book_store_v1.Date.ServicesManager.Service
                 publisherList=publisherList.Where(x=>x.Name.Contains(searchValue,StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
             //paging
-            publisherList = PagedList<Publisher>.ToPagedList(publisherList.AsQueryable(), PageNumber??1, PageSize??5);
-            return publisherList;
+            publisherList = PagedList<Publisher>.ToPagedList(publisherList.AsQueryable(), PageNumber ?? 1, PageSize ?? 5);
+            return (PagedList<Publisher>)publisherList ;
         }
-
 
         public bool IsExistsAsync(int id)
         {

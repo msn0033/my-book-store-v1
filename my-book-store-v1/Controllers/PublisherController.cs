@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using my_book_store_v1.Date.Dto;
 using my_book_store_v1.Date.ServicesManager.Interface;
 using my_book_store_v1.Exceptions;
+using Newtonsoft.Json;
 
 namespace my_book_store_v1.Controllers
 {
@@ -25,8 +26,20 @@ namespace my_book_store_v1.Controllers
             try
             {
                 var item = await _publisher.GetPublishersAsync(OrderBy, search,PageNumber,PageSize);
+               
                 if (item is null)
                     return NoContent();
+              
+                var metadata = new
+                {
+                    item.PageSize,
+                    item.CurrrentPage,
+                    item.TotalPages,
+                    item.HasNext,
+                    item.HasPrevious
+                };
+                Response.Headers.Add("pagenation", JsonConvert.SerializeObject(metadata));
+
                 return Ok(item);
             }
             catch (Exception ex)
