@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using my_book_store_v1.Date.Dto.Versioning.V2;
+using my_book_store_v1.Data.Dto.Versioning.V2;
 
 namespace my_book_store_v1.Controllers.V2
 {
-    [ApiVersion("2.0")]
+    //[ApiVersion("2.0")]
     //[Route("api/V{version:apiversion}/[controller]")] //URL
     [Route("api/[controller]")]
     [ApiController]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
-using my_book_store_v1.Date.Dto;
+using my_book_store_v1.Data.Dto;
+using Serilog;
 using System.Net;
 
 namespace my_book_store_v1.Exceptions
@@ -15,7 +16,7 @@ namespace my_book_store_v1.Exceptions
             this._next = next;
         }
 
-        public async Task InvokeAsync(HttpContext content)
+        public async Task InvokeAsync(HttpContext content,ILoggerFactory loggerFactory)
         {
             try
             {
@@ -24,22 +25,24 @@ namespace my_book_store_v1.Exceptions
             catch (Exception ex)
             {
 
-                await HandleExceptionAsync(content, ex);
+                await HandleExceptionAsync(content, ex,loggerFactory);
+              
             }
         }
-
-        private Task HandleExceptionAsync(HttpContext content, Exception ex)
+        private Task HandleExceptionAsync(HttpContext content, Exception ex,ILoggerFactory loggerFactory)
         {
             content.Response.ContentType = "application/json";
+            var logger=loggerFactory.CreateLogger(nameof(HandleExceptionAsync));
 
             var contentRequest = content.Features.Get<IHttpRequestFeature>();
-            var response = new ErrorDto
+            var ErrorDtoString = new ErrorDto
             {
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Message = ex.Message ,
                 Path = contentRequest.Path
-            };
-            return content.Response.WriteAsync(response.ToString());
+            }.ToString();
+            logger.LogError(ErrorDtoString);
+            return content.Response.WriteAsync(ErrorDtoString);
         }
     }
 }

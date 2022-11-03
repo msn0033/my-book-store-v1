@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+
+<properties>
+	<property key='SourceContext'>HandleExceptionAsync</property>
+	<property key='RequestId'>0HMLQAA0CL2J3:00000002</property>
+	<property key='RequestPath'>/api/Authors/get-all-Author</property>
+	<property key='ConnectionId'>0HMLQAA0CL2J3</property>
+	<property key='EnvironmentName'>Development</property>
+	<property key='MachineName'>3DMURAD</property>
+</properties>

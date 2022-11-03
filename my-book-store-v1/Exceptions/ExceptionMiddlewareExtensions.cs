@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
-using my_book_store_v1.Date.Dto;
+using my_book_store_v1.Data.Dto;
 using System.Net;
 
 namespace my_book_store_v1.Exceptions
@@ -20,13 +20,13 @@ namespace my_book_store_v1.Exceptions
                     var RequestFeature = context.Features.Get<IHttpRequestFeature>();//get request
                     if (contextFeature is not null)
                     {
-                        await context.Response.WriteAsync(new ErrorDto
+                        var ErrorDtostring = new ErrorDto
                         {
                             StatusCode = context.Response.StatusCode,
                             Message = contextFeature.Error.Message,
-                            Path=RequestFeature.Path
-
-                        }.ToString()); 
+                            Path = RequestFeature.Path
+                        }.ToString();
+                        await context.Response.WriteAsync(ErrorDtostring);
                     }
 
                 });

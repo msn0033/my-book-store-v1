@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using my_book_store_v1.Date.Dto;
-using my_book_store_v1.Date.Models;
-using my_book_store_v1.Date.ServicesManager.Interface;
+using my_book_store_v1.Data.Dto;
+using my_book_store_v1.Data.Models;
+using my_book_store_v1.Data.ServicesManager.Interface;
 
 namespace my_book_store_v1.Controllers
 {

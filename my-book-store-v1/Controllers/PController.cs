@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using my_book_store_v1.Date;
-using my_book_store_v1.Date.Models;
+using my_book_store_v1.Data;
+using my_book_store_v1.Data.Models;
 
 namespace my_book_store_v1.Controllers
 {

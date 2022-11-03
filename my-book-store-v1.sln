@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "my-book-store-v1", "my-book-store-v1\my-book-store-v1.csproj", "{C2333F99-2A3A-4463-ACFC-E8BB838B67A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "appConsole", "appConsole\appConsole.csproj", "{4CFCC48C-FDE3-4651-8271-6E7DF9B82D5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "appConsole", "appConsole\appConsole.csproj", "{4CFCC48C-FDE3-4651-8271-6E7DF9B82D5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
